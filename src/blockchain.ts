@@ -93,8 +93,9 @@ export class Transaction {
         transaction,
         Date.now()
       );
-      this.saveBlockchainToDatabase();
       this.chain.push(newBlock);
+      this.saveBlockchainToDatabase();
+
     }
   
     /**

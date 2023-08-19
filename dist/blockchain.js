@@ -92,15 +92,13 @@ class Blockchain {
             }
         });
     }
-    // constructor() {
-    // }
     /**
      * Add a new transaction to the blockchain. The transaction is placed in a new block.
      */
     addTransaction(transaction) {
         const newBlock = new Block(this.latestBlock.hash, transaction, Date.now());
-        this.saveBlockchainToDatabase();
         this.chain.push(newBlock);
+        this.saveBlockchainToDatabase();
     }
     /**
      * Get the balance of an address by aggregating the amounts in the related transactions.
@@ -137,35 +135,3 @@ class Blockchain {
     }
 }
 exports.Blockchain = Blockchain;
-//   // src/blockchain.ts
-// import mongoose from 'mongoose';
-// import BlockchainModel from '../models/blockchain';
-// // ... (Transaction and Block classes)
-// export class Blockchain {
-//   // ... (existing methods)
-//   private async loadBlockchainFromDatabase() {
-//     try {
-//       const blockchainData = await BlockchainModel.findOne();
-//       if (blockchainData) {
-//         this.chain = blockchainData.chain;
-//       }
-//     } catch (err) {
-//       console.error('Error loading blockchain from database:', err);
-//     }
-//   }
-//   private async saveBlockchainToDatabase() {
-//     try {
-//       await BlockchainModel.findOneAndUpdate({}, { chain: this.chain }, { upsert: true });
-//     } catch (err) {
-//       console.error('Error saving blockchain to database:', err);
-//     }
-//   }
-//   constructor() {
-//     this.loadBlockchainFromDatabase();
-//   }
-//   public addTransaction(transaction: Transaction) {
-//     // ... (existing code)
-//     this.saveBlockchainToDatabase();
-//   }
-//   // ... (other methods)
-// }
