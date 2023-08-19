@@ -1,18 +1,26 @@
-import  { Request, Response } from 'express';
-import express from 'express';
-
+// src/app.ts
+import express, { Request, Response } from 'express';
+import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import { Blockchain, Transaction } from './blockchain';
 
+const MONGODB_URI = 'mongodb://localhost:27017/blockchain-wallet';
+
+
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    console.log('Connected to MongoDB database');
+  })
+  .catch(error => {
+    console.error('MongoDB connection error:', error);
+  });
+
+const blockchain = new Blockchain();
 const app = express();
 const port = 3000;
 
-// Create an instance of the blockchain
-const blockchain = new Blockchain();
-
 app.use(bodyParser.json());
 
-// Add transaction endpoint
 app.post('/transaction', (req: Request, res: Response) => {
   const { fromAddress, toAddress, amount } = req.body;
 
@@ -26,7 +34,6 @@ app.post('/transaction', (req: Request, res: Response) => {
   return res.status(201).json({ message: 'Transaction added successfully.' });
 });
 
-// Get balance endpoint
 app.get('/balance/:address', (req: Request, res: Response) => {
   const address = req.params.address;
   const balance = blockchain.getBalance(address);
@@ -34,7 +41,6 @@ app.get('/balance/:address', (req: Request, res: Response) => {
   return res.json({ balance });
 });
 
-// Check transaction history endpoint
 app.get('/transaction-history/:address', (req: Request, res: Response) => {
   const address = req.params.address;
   const transactions = blockchain.getTransactionHistory(address);

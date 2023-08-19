@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Blockchain = exports.Block = exports.Transaction = void 0;
-const blockchain_1 = require("../dist/models/blockchain");
+const blockchain_1 = require("../models/blockchain");
 /**
  * Transaction represents a transfer of value from one address to another.
  * In this simplified scenario, a transaction has a single recipient.

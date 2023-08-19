@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+import BlockchainModel from '../dist/models/blockchain';
 /**
  * Transaction represents a transfer of value from one address to another.
  * In this simplified scenario, a transaction has a single recipient.
@@ -46,6 +48,7 @@ export class Transaction {
   
     constructor() {
       this.chain = [this.createGenesisBlock()];
+      this.loadBlockchainFromDatabase();
     }
   
     /**
@@ -61,6 +64,25 @@ export class Transaction {
     private get latestBlock() {
       return this.chain[this.chain.length - 1];
     }
+
+    private async loadBlockchainFromDatabase() {
+      try {
+        const blockchainData = await BlockchainModel.findOne();
+        if (blockchainData) {
+          this.chain = blockchainData.chain;
+        }
+      } catch (err) {
+        console.error('Error loading blockchain from database:', err);
+      }
+    }
+  
+    private async saveBlockchainToDatabase() {
+      try {
+        await BlockchainModel.findOneAndUpdate({}, { chain: this.chain }, { upsert: true });
+      } catch (err) {
+        console.error('Error saving blockchain to database:', err);
+      }
+    }
   
     /**
      * Add a new transaction to the blockchain. The transaction is placed in a new block.
@@ -71,6 +93,7 @@ export class Transaction {
         transaction,
         Date.now()
       );
+      this.saveBlockchainToDatabase();
       this.chain.push(newBlock);
     }
   

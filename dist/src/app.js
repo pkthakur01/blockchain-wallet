@@ -14,7 +14,7 @@ mongoose_1.default.connect(MONGODB_URI)
     console.error('MongoDB connection error:', error);
 });
 const blockchain = new blockchain_1.Blockchain();
-const app = (0, express_1)();
+const app = (0, express_1);
 const port = 3000;
 app.use(body_parser_1.json());
 app.post('/transaction', (req, res) => {
